@@ -8,7 +8,7 @@ import scala.meta._
 class MigrateExecutionContext extends SemanticRule("MigrateExecutionContext") {
 
   override def fix(implicit doc: SemanticDocument): Patch = {
-//    println("Tree.structure: " + doc.tree.structure)
+//    println("MigrateExecutionContext Tree.structure: " + doc.tree.structure)
     var hasExecutionImport = false
     doc.tree
       .collect {

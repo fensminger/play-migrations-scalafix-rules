@@ -17,7 +17,7 @@ class MigrateControllers(config: MigrateControllersConfig) extends SemanticRule(
   }
 
   override def fix(implicit doc: SemanticDocument): Patch = {
-//    println("Tree.structure: " + doc.tree.structure)
+//    println("MigrateControllers Tree.structure: " + doc.tree.structure)
     //
 
     val ControllerFinder = new TypeFinder("Controller")
