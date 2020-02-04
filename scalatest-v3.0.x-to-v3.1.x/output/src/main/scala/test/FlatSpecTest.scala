@@ -5,6 +5,13 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
+object FakeDataCatalogEntry {
+  def apply(fs: Seq[String]): FakeDataCatalogEntry = new FakeDataCatalogEntry(fs)
+}
+class FakeDataCatalogEntry(fs: Seq[String]) {
+  val location = java.util.UUID.randomUUID.toString
+}
+
 class FlatSpecTest extends AnyFlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
 
   class Fraction(n: Int, d: Int) {

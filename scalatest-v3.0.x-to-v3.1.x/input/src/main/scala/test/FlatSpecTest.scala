@@ -6,6 +6,13 @@ import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FlatSpec, MustMatchers}
 
+object FakeDataCatalogEntry {
+  def apply(fs: Seq[String]): FakeDataCatalogEntry = new FakeDataCatalogEntry(fs)
+}
+class FakeDataCatalogEntry(fs: Seq[String]) {
+  val location = java.util.UUID.randomUUID.toString
+}
+
 class FlatSpecTest extends FlatSpec with MustMatchers with GeneratorDrivenPropertyChecks {
 
   class Fraction(n: Int, d: Int) {
@@ -41,3 +48,4 @@ class FlatSpecTest extends FlatSpec with MustMatchers with GeneratorDrivenProper
   }
 
 }
+

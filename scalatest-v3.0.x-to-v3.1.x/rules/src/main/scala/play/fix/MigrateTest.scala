@@ -8,10 +8,14 @@ import scala.meta._
 class MigrateTest extends SemanticRule("MigrateTest") {
 
   override def fix(implicit doc: SemanticDocument): Patch = {
-    println("MigrateTest Tree.structure: " + doc.tree.structure)
+//    println("MigrateTest Tree.structure: " + doc.tree.structure)
 
     val imports = Imports(doc.tree)
-    doc.tree
+
+    var isMustMatcher = false
+    var isShouldMatcher = false
+
+    val res = doc.tree
       .collect {
         case Importer(q"org.scalatest", importedTypes) =>
           importedTypes.collect {
@@ -19,7 +23,12 @@ class MigrateTest extends SemanticRule("MigrateTest") {
               imports.ensureImport(importer"org.scalatest.flatspec.AnyFlatSpec")
               Patch.removeImportee(i)
             case i @ importee"MustMatchers" =>
+              isMustMatcher = true
               imports.ensureImport(importer"org.scalatest.matchers.must.Matchers")
+              Patch.removeImportee(i)
+            case i @ importee"Matchers" =>
+              isShouldMatcher = true
+              imports.ensureImport(importer"org.scalatest.matchers.should.Matchers")
               Patch.removeImportee(i)
           }.asPatch
 
@@ -47,6 +56,13 @@ class MigrateTest extends SemanticRule("MigrateTest") {
       .asPatch
       .atomic +
       imports.asPatch
+
+    if (isMustMatcher && isShouldMatcher) {
+      // TODO Improve error management or rename Matcher
+      println("ERROR : The generated code does not compile. 2 matchers with the same name")
+    }
+
+    res
   }
 
 }
