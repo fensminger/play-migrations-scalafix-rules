@@ -7,7 +7,7 @@ import scala.meta._
 
 class SeqToList extends SemanticRule("SeqToList") {
   override def fix(implicit doc: SemanticDocument): Patch = {
-    println("SeqToList Tree.structure: " + doc.tree.structure)
+//    println("SeqToList Tree.structure: " + doc.tree.structure)
     val imports = Imports(doc.tree)
 
     /**

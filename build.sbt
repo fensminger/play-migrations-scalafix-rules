@@ -6,7 +6,16 @@ inThisBuild(
     crossScalaVersions := Seq(V.scala211, V.scala212),
     addCompilerPlugin(scalafixSemanticdb),
     scalacOptions ++= List("-Yrangepos"),
-    updateOptions := updateOptions.value.withLatestSnapshots(false)
+    updateOptions := updateOptions.value.withLatestSnapshots(false),
+    credentials += Credentials(Path.userHome / ".sbt" / "credentials"),
+    publishTo := {
+      val nexus = "https://nexus.foyer.lu/repository/"
+      if (version.value.trim.endsWith("SNAPSHOT")) {
+        Some("snapshots" at nexus + "mvn-hosted-snapshots")
+      } else {
+        Some("releases" at nexus + "mvn-hosted-releases")
+      }
+    }
   )
 )
 
@@ -14,6 +23,8 @@ skip in publish := true
 
 lazy val play25 = "2.5.19"
 lazy val play26 = "2.6.22"
+lazy val play27 = "2.7.4"
+lazy val play28 = "2.8.0"
 
 lazy val core = project
   .settings(
@@ -68,8 +79,8 @@ lazy val tests26 = project
   .dependsOn(rules26)
   .enablePlugins(ScalafixTestkitPlugin)
 
-lazy val inputScalatest30 = project
-  .in(file("scalatest-v3.0.x-to-v3.1.x/input"))
+lazy val input27 = project
+  .in(file("play-v2.7.x-to-v2.8.x/input"))
   .settings(skip in publish := true)
   .settings(
     libraryDependencies ++= Seq(
@@ -79,8 +90,8 @@ lazy val inputScalatest30 = project
     )
   )
 
-lazy val inputScalatest31 = project
-  .in(file("scalatest-v3.0.x-to-v3.1.x/output"))
+lazy val output28 = project
+  .in(file("play-v2.7.x-to-v2.8.x/output"))
   .settings(skip in publish := true)
   .settings(
     libraryDependencies ++= Seq(
@@ -91,27 +102,27 @@ lazy val inputScalatest31 = project
     )
   )
 
-lazy val rulesScalatest31 = project
-  .in(file("scalatest-v3.0.x-to-v3.1.x/rules"))
+lazy val rules28 = project
+  .in(file("play-v2.7.x-to-v2.8.x/rules"))
   .dependsOn(core)
   .settings(
-    moduleName := "scalatest-v3.0.x-to-v3.1.x-rules",
+    moduleName := "play-migrations-v27-to-v28-scalafix-rules",
     libraryDependencies += "ch.epfl.scala" %% "scalafix-core" % V.scalafixVersion
   )
 
-lazy val testsScalatest31 = project
-  .in(file("scalatest-v3.0.x-to-v3.1.x/tests"))
+lazy val tests28 = project
+  .in(file("play-v2.7.x-to-v2.8.x/tests"))
   .settings(
     skip in publish := true,
     libraryDependencies += "ch.epfl.scala" % "scalafix-testkit" % V.scalafixVersion % Test cross CrossVersion.full,
     compile.in(Compile) :=
-      compile.in(Compile).dependsOn(compile.in(inputScalatest30, Compile)).value,
+      compile.in(Compile).dependsOn(compile.in(input27, Compile)).value,
     scalafixTestkitOutputSourceDirectories :=
-      sourceDirectories.in(inputScalatest31, Compile).value,
+      sourceDirectories.in(output28, Compile).value,
     scalafixTestkitInputSourceDirectories :=
-      sourceDirectories.in(inputScalatest30, Compile).value,
+      sourceDirectories.in(input27, Compile).value,
     scalafixTestkitInputClasspath :=
-      fullClasspath.in(inputScalatest30, Compile).value
+      fullClasspath.in(input27, Compile).value
   )
-  .dependsOn(rulesScalatest31)
+  .dependsOn(rules28)
   .enablePlugins(ScalafixTestkitPlugin)
