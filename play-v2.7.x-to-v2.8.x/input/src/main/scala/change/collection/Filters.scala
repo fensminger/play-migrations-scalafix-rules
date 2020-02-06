@@ -20,7 +20,7 @@ case class InfEqualFilter(field: String, value: String) extends Filter
 
 case class InListIndexedFilter(field: String, value: List[IndexedSeq[String]]) extends Filter
 case class InIndexedFilter(field: String, value: IndexedSeq[String]) extends Filter
-case class InFilter(field: String, value: Seq[String]) extends Filter
+case class InFilter(field: String, value: /* comment */ Seq[String]/* comment2 */ ) extends Filter
 
 case class BetweenFilter(field: String, bot: String, up: String) extends Filter
 

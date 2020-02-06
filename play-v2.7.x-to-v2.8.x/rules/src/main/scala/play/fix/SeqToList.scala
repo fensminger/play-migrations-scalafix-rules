@@ -30,6 +30,8 @@ class SeqToList extends SemanticRule("SeqToList") {
     val res = doc.tree
       .collect {
         case v @ Type.Name(_) => Patch.replaceTree(v, replaceAllType(v).syntax).atomic
+        case v @ Term.Name("Seq") => Patch.replaceTree(v, Term.Name("List").syntax).atomic
+        case v @ Term.Name("IndexedSeq") => Patch.replaceTree(v, Term.Name("Vector").syntax).atomic
         case v @ Term.Name("toSeq") => Patch.replaceTree(v, Term.Name("toList").syntax).atomic
         case v @ Term.Name("toIndexedSeq") => Patch.replaceTree(v, Term.Name("toVector").syntax).atomic
 

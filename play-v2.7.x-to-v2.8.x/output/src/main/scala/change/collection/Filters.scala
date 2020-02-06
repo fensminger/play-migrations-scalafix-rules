@@ -18,7 +18,7 @@ case class InfEqualFilter(field: String, value: String) extends Filter
 
 case class InListIndexedFilter(field: String, value: List[Vector[String]]) extends Filter
 case class InIndexedFilter(field: String, value: Vector[String]) extends Filter
-case class InFilter(field: String, value: List[String]) extends Filter
+case class InFilter(field: String, value: /* comment */ List[String]/* comment2 */ ) extends Filter
 
 case class BetweenFilter(field: String, bot: String, up: String) extends Filter
 
